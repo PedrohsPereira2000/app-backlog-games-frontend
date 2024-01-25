@@ -12,7 +12,7 @@
             Informações do jogo
           </h2>
 
-          <form @submit.prevent="register">
+          <form @submit.prevent="cadastrar">
             <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
               <div>
                 <label class="text-gray-700" for="name">Name</label>
@@ -48,25 +48,20 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
+<script>
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import axios from 'axios'
 
-interface Game {
-  name: string
-  platform: string
-}
-
-const game = ref<Game>({
+const game = ref({
   name: '',
   platform: '',
-})
+});
 
 const router = useRouter()
 const user_id = router.currentRoute.value.params.user_id
 
-async function register() {
+async function cadastrar() {
   
   if (!user_id) {
     console.error('No user found in localStorage')
@@ -87,14 +82,26 @@ async function register() {
   }
  
   try {
-    const response = await axios.post('http://localhost:8889/backlog/register', data)
-    if (response.status === 201) {
-      router.push({ name: 'Dashboard', params: { user_id: user_id } })
-    } else {
-      this.$message.error(response.data.message)
-    }
+    await axios.post('http://localhost:8889/backlog/register', data)
+    .then((response) => {
+      this.$message.success(response.data.message);
+      this.$router.push({ name: 'Dashboard', params: { user_id: user_id } })
+    })
+    .catch((error) => {
+      this.$message.error(error.response.data.message);
+    });
+    
   } catch (error) {
     console.error(error)
+  }
+}
+
+export default {
+  setup() {
+    return {
+      game,
+      cadastrar
+    }
   }
 }
 </script>

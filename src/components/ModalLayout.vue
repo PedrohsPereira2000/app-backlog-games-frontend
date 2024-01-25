@@ -76,7 +76,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script>
 import { ref, defineProps } from 'vue'
 import axios from 'axios'
 
@@ -109,6 +109,19 @@ const updateGame = async () => {
 
 const closeModal = () => {
   emit('close')
+}
+
+export default {
+  setup() {
+    return {
+      open,
+      props,
+      hours,
+      updateHours,
+      updateGame,
+      closeModal
+    }
+  }
 }
 </script>
 

@@ -66,7 +66,7 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
+<script>
 import { ref } from 'vue'
 import { useSidebar } from '../composables/useSidebar'
 
@@ -83,4 +83,14 @@ const getUserId = () => {
   return user ? user.user_id : null;
 }
 
+export default {
+  setup() {
+    return {
+      isOpen,
+      activeClass,
+      inactiveClass,
+      getUserId
+    }
+  }
+}
 </script>
