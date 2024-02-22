@@ -336,7 +336,7 @@ export default {
       const storedUser = localStorage.getItem('user')
       if (!storedUser) {
         const userId = this.$route.params.user_id
-        axios.get(`http://localhost:8889/user/${userId}`)
+        axios.get(`https://app-backlog-games-backend-gifaqgqok.vercel.app/user/${userId}`)
           .then(res => {
             this.user_id = res.data.user.user_id
             this.user_name = res.data.user.user_name
@@ -357,7 +357,7 @@ export default {
       }
     },
     async deleteGame(gameId) {
-      const res = await axios.post('http://localhost:8889/backlog/delete', { id: gameId, user_id: this.user_id })
+      const res = await axios.post('https://app-backlog-games-backend-gifaqgqok.vercel.app/backlog/delete', { id: gameId, user_id: this.user_id })
       if (res.status === 200) {
         this.fetchUserData()
       }

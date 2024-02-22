@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { mapActions } from 'vuex';
+// import { mapActions } from 'vuex';
 
 const router = useRouter()
 const email = ref('')

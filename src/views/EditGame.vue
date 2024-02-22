@@ -116,7 +116,7 @@ export default {
     const gameId = this.$route.params.game_id
 
     try {
-      const response = await axios.post(`http://localhost:8889/backlog/search`, { user_id: userId, id: gameId })
+      const response = await axios.post(`https://app-backlog-games-backend-gifaqgqok.vercel.app/backlog/search`, { user_id: userId, id: gameId })
       this.game = response.data.game
     } catch (error) {
       console.error(error)
@@ -128,7 +128,7 @@ export default {
     },
     async saveGame() {
       try {
-        const resp = await axios.post('http://localhost:8889/backlog/update', {"user_id": this.$route.params.user_id, "game": this.game})
+        const resp = await axios.post('https://app-backlog-games-backend-gifaqgqok.vercel.app/backlog/update', {"user_id": this.$route.params.user_id, "game": this.game})
         if (resp.status === 200) {
           // this.$message.success('Game updated successfully')
           this.$router.push({ name: 'Dashboard', params: { user_id: this.$route.params.user_id } })

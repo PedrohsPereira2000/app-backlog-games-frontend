@@ -87,7 +87,7 @@ async function register() {
   }
  
   try {
-    const response = await axios.post('http://localhost:8889/backlog/register', data)
+    const response = await axios.post('https://app-backlog-games-backend-gifaqgqok.vercel.app/backlog/register', data)
     if (response.status === 201) {
       router.push({ name: 'Dashboard', params: { user_id: user_id } })
     } else {

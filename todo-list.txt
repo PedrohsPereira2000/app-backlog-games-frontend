@@ -1,6 +1,0 @@
-[x] - Página de login do usuário
-[x] - Página de cadastro do usuário
-[ ] - Página Home
-    [ ] - Receber id do usuário
-    [ ] - Carregar infos do usuário
-    [ ] - Adaptar front para representar backlog de jogos
