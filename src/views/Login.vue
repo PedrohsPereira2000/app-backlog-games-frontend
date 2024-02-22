@@ -98,7 +98,7 @@ export default {
         .then(res => {
           console.log(res)
           if (res.status === 200) {
-            this.$router.push({ name: 'Dashboard', params: { user_id: res.data.user_id } })
+            this.$router.push({ name: 'Dashboard', params: { user_id: res.data?.user_id } })
           } else {
             this.$message.error(res.data.message)
           }
