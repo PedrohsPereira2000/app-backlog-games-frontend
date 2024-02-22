@@ -305,6 +305,7 @@ import { onMounted, watch, defineProps } from 'vue'
 import axios from 'axios'
 import ModalLayout from '../components/ModalLayout.vue'
 
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 export default {
   components: {
@@ -338,6 +339,7 @@ export default {
         const userId = this.$route.params.user_id
         axios.get(`https://app-backlog-games-backend.vercel.app/user/${userId}`)
           .then(res => {
+            alert(res)
             this.user_id = res.data.user.user_id
             this.user_name = res.data.user.user_name
             this.user_email = res.data.user.user_email
@@ -348,6 +350,10 @@ export default {
             this.platinums = this.backlog_games.filter(game => game.platinum).length;
             this.inBacklog = this.backlog_games.length - this.platinums;
           })
+          .catch(error => {
+            alert(error)
+          })
+
       }
     },
     openModal(game, type) {
