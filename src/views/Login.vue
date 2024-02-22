@@ -94,8 +94,10 @@ export default {
   },
   methods: {
     Login() {
+      alert(this.formData)
       axios.post('https://app-backlog-games-backend.vercel.app/user/login', this.formData)
         .then(res => {
+          alert(res)
           console.log(res)
           if (res.status === 200) {
             this.$router.push({ name: 'Dashboard', params: { user_id: res.data?.user_id } })
