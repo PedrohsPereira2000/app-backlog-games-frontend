@@ -61,13 +61,6 @@
               <span class="mx-2 text-sm text-gray-600">Remember me</span>
             </label>
           </div>
-
-          <div>
-            <a
-              class="block text-sm text-indigo-700 fontme hover:underline"
-              href="/recover-password"
-            >Forgot your password?</a>
-          </div>
         </div>
         <div class="mt-6">
           <a

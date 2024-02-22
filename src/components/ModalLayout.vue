@@ -133,6 +133,19 @@ const updateGame = async () => {
 const closeModal = () => {
   emit('close')
 }
+
+export default {
+  setup() {
+    return {
+      open,
+      props,
+      hours,
+      updateHours,
+      updateGame,
+      closeModal
+    }
+  }
+}
 </script>
 
 <style>
