@@ -35,11 +35,11 @@
         <div class="px-6 py-4 text-left modal-content">
           <!-- Title -->
           <div class="flex items-center pb-3">
-            <p v-if="game.type === 'finished'" class="text-2xl font-bold">
-              O {{ game.game.name }} foi finalizado em quanto tempo?
+            <p v-if="type === 'finished'" class="text-2xl font-bold">
+              O {{ gameData.name }} foi finalizado em quanto tempo?
             </p>
             <p v-else class="text-2xl font-bold">
-              Boa quanto tempo levou a platina do {{ game.game.name }}?
+              Boa quanto tempo levou a platina do {{ gameData.name }}?
             </p>
           </div>
 
@@ -77,27 +77,50 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps } from 'vue'
+import { ref, defineProps as defineVueProps} from 'vue' // Renomeando defineProps para evitar conflito
 import axios from 'axios'
 
-const open = ref(true)
+interface Game {
+  id: string,
+  name: string,
+  platform: string,
+  hours: number,
+  finished: boolean,
+  platinum: boolean,
+  price: number
+}
+
+const props = defineVueProps({
+  game: Object as () => Game,
+})
+
 
 const emit = defineEmits(['close', 'game-updated'])
 
-const props = defineProps({
-  game: Object,
+const gameData = ref<Game>({
+  id: '',
+  name: '',
+  platform: '',
+  hours: 0,
+  finished: false,
+  platinum: false,
+  price: 0
 })
 
-let hours = ref(props.game.game.hours)
+const type = gameData.value.finished ? 'finished' : (gameData.value.platinum ? 'platinum' : '')
 
-const updateHours = (event) => {
-  hours.value = event.target.value
+const open = ref(true)
+
+let hours = ref(gameData.value.hours)
+
+const updateHours = (event: Event) => {
+  hours.value = parseInt((event.target as HTMLInputElement).value)
 }
 
 const updateGame = async () => {
   try {
-    props.game.game.hours = parseInt(hours.value)
-    const response = await axios.post('http://localhost:8889/backlog/update/progress', {"type": props.game.type, "game": props.game.game, "user_id": props.game.user_id})
+    gameData.value.hours = hours.value
+    const response = await axios.post(`${process.env.VUE_APP_BACKEND_URL}/backlog/update/progress`, {"type": type, "game": gameData.value, "user_id": gameData.value.id})
     console.log(response.data)
     emit('game-updated')
     location.reload()

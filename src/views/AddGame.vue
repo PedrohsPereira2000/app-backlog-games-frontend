@@ -26,12 +26,16 @@
 
               <div>
                 <label class="text-gray-700" for="platform">Platform</label>
-                <input
+                <select
                   v-model="game.platform"
                   class="w-full mt-2 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500"
-                  type="text"
                   id="platform"
                 >
+                  <option value="PS3">PS3</option>
+                  <option value="PS4">PS4</option>
+                  <option value="PS5">PS5</option>
+                  <option value="PC">PC</option>
+                </select>
               </div>
             </div>
 
@@ -87,11 +91,11 @@ async function register() {
   }
  
   try {
-    const response = await axios.post('http://localhost:8889/backlog/register', data)
+    const response = await axios.post(`${process.env.VUE_APP_BACKEND_URL}/backlog/register`, data)
     if (response.status === 201) {
       router.push({ name: 'Dashboard', params: { user_id: user_id } })
     } else {
-      this.$message.error(response.data.message)
+      alert(response.data.message)
     }
   } catch (error) {
     console.error(error)
