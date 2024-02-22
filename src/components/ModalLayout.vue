@@ -35,11 +35,11 @@
         <div class="px-6 py-4 text-left modal-content">
           <!-- Title -->
           <div class="flex items-center pb-3">
-            <p v-if="type === 'finished'" class="text-2xl font-bold">
-              O {{ gameData.name }} foi finalizado em quanto tempo?
+            <p v-if="type_game === 'finished'" class="text-2xl font-bold">
+              O {{ props.game?.name }} foi finalizado em quanto tempo?
             </p>
             <p v-else class="text-2xl font-bold">
-              Boa quanto tempo levou a platina do {{ gameData.name }}?
+              Boa quanto tempo levou a platina do {{ props.game?.name }}?
             </p>
           </div>
 
@@ -76,7 +76,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import { ref, defineProps as defineVueProps} from 'vue' // Renomeando defineProps para evitar conflito
 import axios from 'axios'
 
@@ -90,59 +90,61 @@ interface Game {
   price: number
 }
 
-const props = defineVueProps({
-  game: Object as () => Game,
-})
-
-
 const emit = defineEmits(['close', 'game-updated'])
 
-const gameData = ref<Game>({
-  id: '',
-  name: '',
-  platform: '',
-  hours: 0,
-  finished: false,
-  platinum: false,
-  price: 0
-})
-
-const type = gameData.value.finished ? 'finished' : (gameData.value.platinum ? 'platinum' : '')
-
-const open = ref(true)
-
-let hours = ref(gameData.value.hours)
-
-const updateHours = (event: Event) => {
-  hours.value = parseInt((event.target as HTMLInputElement).value)
-}
-
-const updateGame = async () => {
-  try {
-    gameData.value.hours = hours.value
-    const response = await axios.post(`${process.env.VUE_APP_BACKEND_URL}/backlog/update/progress`, {"type": type, "game": gameData.value, "user_id": gameData.value.id})
-    console.log(response.data)
-    emit('game-updated')
-    location.reload()
-    closeModal()
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-const closeModal = () => {
-  emit('close')
-}
+// const gameData = ref<Game>({
+//   id: '',
+//   name: '',
+//   platform: '',
+//   hours: 0,
+//   finished: false,
+//   platinum: false,
+//   price: 0
+// })
 
 export default {
-  setup() {
+  props :{
+    game: Object as () => Game,
+  },
+  setup(props) {
+    
+    const open = ref(true)
+
+    let hours = ref(props.game?.hours ?? 0)
+
+    const updateHours = (event: Event) => {
+      hours.value = parseInt((event.target as HTMLInputElement).value)
+    }
+
+    const updateGame = async () => {
+      try {
+        if(props.game){
+          props.game.hours = hours.value
+        }
+        const response = await axios.post(`${process.env.VUE_APP_BACKEND_URL}/backlog/update/progress`, {"type": type_game, "game": props.game, "user_id": props.game?.id})
+        console.log(response.data)
+        emit('game-updated')
+        location.reload()
+        closeModal()
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const closeModal = () => {
+      emit('close')
+    }
+
+    const type_game = ref<string>(props.game?.finished ? 'finished' : (props.game?.platinum ? 'platinum' : ''))
+
     return {
       open,
       props,
       hours,
       updateHours,
       updateGame,
-      closeModal
+      closeModal,
+      type_game
     }
   }
 }
