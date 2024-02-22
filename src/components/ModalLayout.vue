@@ -97,7 +97,7 @@ const updateHours = (event) => {
 const updateGame = async () => {
   try {
     props.game.game.hours = parseInt(hours.value)
-    const response = await axios.post('https://app-backlog-games-backend-gifaqgqok.vercel.app/backlog/update/progress', {"type": props.game.type, "game": props.game.game, "user_id": props.game.user_id})
+    const response = await axios.post('https://app-backlog-games-backend.vercel.app/backlog/update/progress', {"type": props.game.type, "game": props.game.game, "user_id": props.game.user_id})
     console.log(response.data)
     emit('game-updated')
     location.reload()
