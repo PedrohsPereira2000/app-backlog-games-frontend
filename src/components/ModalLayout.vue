@@ -35,11 +35,11 @@
         <div class="px-6 py-4 text-left modal-content">
           <!-- Title -->
           <div class="flex items-center pb-3">
-            <p v-if="type_game === 'finished'" class="text-2xl font-bold">
-              O {{ props.game?.name }} foi finalizado em quanto tempo?
+            <p v-if="game.type === 'finished'" class="text-2xl font-bold">
+              O {{ game.game.name }} foi finalizado em quanto tempo?
             </p>
             <p v-else class="text-2xl font-bold">
-              Boa quanto tempo levou a platina do {{ props.game?.name }}?
+              Boa quanto tempo levou a platina do {{ game.game.name }}?
             </p>
           </div>
 
@@ -76,45 +76,23 @@
   </div>
 </template>
 
-<script lang="ts">
-import { ref, defineProps as defineVueProps} from 'vue' // Renomeando defineProps para evitar conflito
+<script setup lang="ts">
+import { ref, defineProps } from 'vue'
 import axios from 'axios'
 
-interface Game {
-  id: string,
-  name: string,
-  platform: string,
-  hours: number,
-  finished: boolean,
-  platinum: boolean,
-  price: number
-}
+const open = ref(true)
 
 const emit = defineEmits(['close', 'game-updated'])
 
-// const gameData = ref<Game>({
-//   id: '',
-//   name: '',
-//   platform: '',
-//   hours: 0,
-//   finished: false,
-//   platinum: false,
-//   price: 0
-// })
+const props = defineProps({
+  game: Object,
+})
 
-export default {
-  props :{
-    game: Object as () => Game,
-  },
-  setup(props) {
-    
-    const open = ref(true)
+let hours = ref(props.game.game.hours)
 
-    let hours = ref(props.game?.hours ?? 0)
-
-    const updateHours = (event: Event) => {
-      hours.value = parseInt((event.target as HTMLInputElement).value)
-    }
+const updateHours = (event) => {
+  hours.value = event.target.value
+}
 
 const updateGame = async () => {
   try {
@@ -129,22 +107,8 @@ const updateGame = async () => {
   }
 }
 
-    const closeModal = () => {
-      emit('close')
-    }
-
-    const type_game = ref<string>(props.game?.finished ? 'finished' : (props.game?.platinum ? 'platinum' : ''))
-
-    return {
-      open,
-      props,
-      hours,
-      updateHours,
-      updateGame,
-      closeModal,
-      type_game
-    }
-  }
+const closeModal = () => {
+  emit('close')
 }
 </script>
 

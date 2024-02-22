@@ -12,7 +12,7 @@
             Informações do jogo
           </h2>
 
-          <form @submit.prevent="cadastrar">
+          <form @submit.prevent="register">
             <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
               <div>
                 <label class="text-gray-700" for="name">Name</label>
@@ -26,16 +26,12 @@
 
               <div>
                 <label class="text-gray-700" for="platform">Platform</label>
-                <select
+                <input
                   v-model="game.platform"
                   class="w-full mt-2 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500"
+                  type="text"
                   id="platform"
                 >
-                  <option value="PS3">PS3</option>
-                  <option value="PS4">PS4</option>
-                  <option value="PS5">PS5</option>
-                  <option value="PC">PC</option>
-                </select>
               </div>
             </div>
 
@@ -52,20 +48,25 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import axios from 'axios'
 
-const game = ref({
+interface Game {
+  name: string
+  platform: string
+}
+
+const game = ref<Game>({
   name: '',
   platform: '',
-});
+})
 
 const router = useRouter()
 const user_id = router.currentRoute.value.params.user_id
 
-async function cadastrar() {
+async function register() {
   
   if (!user_id) {
     console.error('No user found in localStorage')
@@ -90,19 +91,10 @@ async function cadastrar() {
     if (response.status === 201) {
       router.push({ name: 'Dashboard', params: { user_id: user_id } })
     } else {
-      alert(response.data.message)
+      this.$message.error(response.data.message)
     }
   } catch (error) {
     console.error(error)
-  }
-}
-
-export default {
-  setup() {
-    return {
-      game,
-      cadastrar
-    }
   }
 }
 </script>

@@ -2,7 +2,15 @@
 
 Dashboard starter template built with Vite, Vue 3, Tailwind CSS and TypeScript.
 
-Template copied from https://github.com/tailwindcomponents/dashboard
+Copied from https://github.com/tailwindcomponents/dashboard and converted to Vue.
+
+## Demo
+
+https://v-dashboard.vercel.app/
+
+![Demo](https://i.imgur.com/RqXxEHL.gif)
+
+Note if you have access to [Tailwind UI](https://tailwindui.com), you can follow the following steps to add it:
 
 1. Install `@tailwindcss/ui`:
 

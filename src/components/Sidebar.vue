@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <!-- <nav class="mt-10">
+      <nav class="mt-10">
         <router-link
           class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
           :class="[$route.name === 'Dashboard' ? activeClass : inactiveClass]"
@@ -62,11 +62,11 @@
 
           <span class="mx-4">Dashboard</span>
         </router-link>
-      </nav> -->
+      </nav>
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useSidebar } from '../composables/useSidebar'
 
@@ -78,19 +78,9 @@ const inactiveClass = ref(
   'border-gray-900 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100',
 )
 
-// const getUserId = () => {
-//   const user = JSON.parse(localStorage.getItem('user'));
-//   return user ? user.user_id : null;
-// }
-
-export default {
-  setup() {
-    return {
-      isOpen,
-      activeClass,
-      inactiveClass,
-      getUserId
-    }
-  }
+const getUserId = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  return user ? user.user_id : null;
 }
+
 </script>
