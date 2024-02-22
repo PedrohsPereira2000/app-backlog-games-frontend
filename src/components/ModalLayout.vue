@@ -80,6 +80,8 @@
 import { ref, defineProps } from 'vue'
 import axios from 'axios'
 
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+
 const open = ref(true)
 
 const emit = defineEmits(['close', 'game-updated'])

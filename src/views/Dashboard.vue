@@ -236,7 +236,8 @@
                         {{ game.platform }}
                       </div>
                     </div>
-                  </div>
+                  </div>axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+
                 </td>
 
                 <td class="px-6 py-4 border-b border-gray-200 whitespace-nowrap text-center">
