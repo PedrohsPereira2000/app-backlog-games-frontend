@@ -102,7 +102,7 @@ export default {
   },
   methods: {
     register_user() {
-      axios.post(`${process.env.VUE_APP_BACKEND_URL}/user/register`, this.formData)
+      axios.post('https://app-backlog-games-backend-gifaqgqok.vercel.app/user/register', this.formData)
         .then(res => {
           console.log(res)
           if (res.status === 201) {

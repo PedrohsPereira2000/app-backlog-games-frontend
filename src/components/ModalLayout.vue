@@ -116,20 +116,18 @@ export default {
       hours.value = parseInt((event.target as HTMLInputElement).value)
     }
 
-    const updateGame = async () => {
-      try {
-        if(props.game){
-          props.game.hours = hours.value
-        }
-        const response = await axios.post(`${process.env.VUE_APP_BACKEND_URL}/backlog/update/progress`, {"type": type_game, "game": props.game, "user_id": props.game?.id})
-        console.log(response.data)
-        emit('game-updated')
-        location.reload()
-        closeModal()
-      } catch (error) {
-        console.error(error)
-      }
-    }
+const updateGame = async () => {
+  try {
+    props.game.game.hours = parseInt(hours.value)
+    const response = await axios.post('https://app-backlog-games-backend-gifaqgqok.vercel.app/backlog/update/progress', {"type": props.game.type, "game": props.game.game, "user_id": props.game.user_id})
+    console.log(response.data)
+    emit('game-updated')
+    location.reload()
+    closeModal()
+  } catch (error) {
+    console.error(error)
+  }
+}
 
     const closeModal = () => {
       emit('close')

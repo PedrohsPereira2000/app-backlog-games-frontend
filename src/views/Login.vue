@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     Login() {
-      axios.post(`${process.env.VUE_APP_BACKEND_URL}/user/login`, this.formData)
+      axios.post('https://app-backlog-games-backend-gifaqgqok.vercel.app/user/login', this.formData)
         .then(res => {
           console.log(res)
           if (res.status === 200) {
