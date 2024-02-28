@@ -95,11 +95,8 @@ export default {
   },
   methods: {
     Login() {
-      alert(this.formData)
       axios.post('https://app-backlog-games-backend.vercel.app/login', this.formData)
         .then(res => {
-          alert('voltou')
-          console.log(res)
           if (res.status === 200) {
             this.$router.push({ name: 'Dashboard', params: { user_id: res.data?.user_id } })
           } else {
@@ -107,7 +104,7 @@ export default {
           }
         })
         .catch(err => {
-          alert('deu erro')
+          alert(err)
           console.log(err)
         })
     }

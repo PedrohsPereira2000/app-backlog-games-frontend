@@ -236,7 +236,7 @@
                         {{ game.platform }}
                       </div>
                     </div>
-                  </div>axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+                  </div>
 
                 </td>
 
@@ -340,13 +340,12 @@ export default {
         const userId = this.$route.params.user_id
         axios.get(`https://app-backlog-games-backend.vercel.app/user/${userId}`)
           .then(res => {
-            alert(res)
-            this.user_id = res.data.user.user_id
-            this.user_name = res.data.user.user_name
-            this.user_email = res.data.user.user_email
-            this.backlog_games = res.data.user.backlog_games
-            this.list_buy_games = res.data.user.list_buy_games
-            this.wallet = res.data.user.wallet
+            this.user_id = res.data.Success.user_id
+            this.user_name = res.data.Success.user_name
+            this.user_email = res.data.Success.user_email
+            this.backlog_games = res.data.Success.backlog_games
+            this.list_buy_games = res.data.Success.list_buy_games
+            this.wallet = res.data.Success.wallet
             this.finisheds = this.backlog_games.filter(game => game.finished).length;
             this.platinums = this.backlog_games.filter(game => game.platinum).length;
             this.inBacklog = this.backlog_games.length - this.platinums;
@@ -372,23 +371,27 @@ export default {
   },
   computed: {
     sortedGames() {
-      return this.backlog_games.sort((a, b) => {
-        // Ordenar por 'finished' e 'platinum'
-        if (!a.finished && !a.platinum && (b.finished || b.platinum)) return -1;
-        if (a.finished && !a.platinum && b.platinum) return -1;
-        if (a.finished === b.finished && a.platinum === b.platinum) {
-          // Se 'finished' e 'platinum' forem iguais, ordenar por plataforma
-          if (a.platform.toLowerCase() < b.platform.toLowerCase()) return -1;
-          if (a.platform.toLowerCase() > b.platform.toLowerCase()) return 1;
-          // Se a plataforma for igual, ordenar por nome
-          if (a.platform.toLowerCase() === b.platform.toLowerCase()) {
-            if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-            if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+      if (this.backlog_games.length === 0) {
+        return []; // Retorna uma lista vazia se backlog_games estiver vazio
+      } else {
+        return this.backlog_games.sort((a, b) => {
+          // Ordenar por 'finished' e 'platinum'
+          if (!a.finished && !a.platinum && (b.finished || b.platinum)) return -1;
+          if (a.finished && !a.platinum && b.platinum) return -1;
+          if (a.finished === b.finished && a.platinum === b.platinum) {
+            // Se 'finished' e 'platinum' forem iguais, ordenar por plataforma
+            if (a.platform.toLowerCase() < b.platform.toLowerCase()) return -1;
+            if (a.platform.toLowerCase() > b.platform.toLowerCase()) return 1;
+            // Se a plataforma for igual, ordenar por nome
+            if (a.platform.toLowerCase() === b.platform.toLowerCase()) {
+              if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+              if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+            }
+            return 0;
           }
-          return 0;
-        }
-        return 1;
-      });
+          return 1;
+        });
+      }
     },
   },
 };

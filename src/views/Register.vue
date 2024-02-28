@@ -105,8 +105,8 @@ export default {
       axios.post('https://app-backlog-games-backend.vercel.app/user/register', this.formData)
         .then(res => {
           console.log(res)
-          if (res.status === 201) {
-            this.$router.push({ path: '/dashboard' })
+          if (res.status === 200) {
+            this.$router.push({ name: 'Dashboard', params: { user_id: res.data?.created_user } })
           } else {
             this.$message.error(res.data.message)
           }
