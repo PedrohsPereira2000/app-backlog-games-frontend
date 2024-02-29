@@ -63,6 +63,22 @@
           <span class="mx-4">Dashboard</span>
         </router-link>
       </nav>
+
+      <nav class="mt-1">
+        <router-link
+          class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
+          :class="[$route.name === 'PurchasedGames' ? activeClass : inactiveClass]"
+          :to="{ name: 'PurchasedGames', params: { user_id: getUserId() } }"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+          </svg>
+
+
+          <span class="mx-4">Purchased Games</span>
+        </router-link>
+      </nav>
+
       <nav class="mt-1">
         <router-link
           class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"

@@ -337,7 +337,7 @@ export default {
       }
     },
     async deleteGame(gameId) {
-      const res = await axios.post('http://localhost:5000/dashboard/delete', { id: gameId, user_id: this.user_id })
+      const res = await axios.post(`http://localhost:5000/dashboard/${userId}/delete`, { id: gameId, user_id: this.user_id })
       if (res.status === 200) {
         this.fetchUserData()
       }
