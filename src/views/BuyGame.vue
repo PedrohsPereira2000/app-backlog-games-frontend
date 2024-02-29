@@ -33,13 +33,24 @@
                   id="platform"
                 >
               </div>
+
+              <div>
+                <label class="text-gray-700" for="price">Price</label>
+                <input
+                  v-model="game.price"
+                  class="w-full mt-2 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500"
+                  type="number"
+                  id="price"
+                >
+              </div>
+
             </div>
 
             <div class="flex justify-end mt-4">
               <button
                 class="px-4 py-2 text-gray-200 bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
               >
-                Save
+                Register
               </button>
             </div>
           </form>
@@ -50,17 +61,19 @@
 </template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, defineProps } from 'vue'
 import axios from 'axios'
 
 interface Game {
   name: string
   platform: string
+  price: Number
 }
 
 const game = ref<Game>({
   name: '',
   platform: '',
+  price: 0
 })
 
 const router = useRouter()
@@ -74,24 +87,25 @@ async function register() {
   }
 
   const data = {
-    user_id: user_id,
     game: {
-      id: 0,
+      id: await (await axios.get(`http://localhost:5000/dashboard/${user_id}/count_games`)).data.count + 1,
       name: game.value.name,
       platform: game.value.platform,
       hours: 0,
       finished: false,
       platinum: false,
-      price: 0.0,
+      earned: 0,
+      price: game.value.price,
     }
   }
  
   try {
-    const response = await axios.post(`${process.env.VUE_APP_BASE_URL}/backlog/new_game`, data)
+    const response = await axios.post(`http://localhost:5000/dashboard/${user_id}/buy_game`, data)
+    console.log(response)
     if (response.status === 201) {
       router.push({ name: 'Dashboard', params: { user_id: user_id } })
     } else {
-      this.$message.error(response.data.message)
+      console.log(response.data.message)
     }
   } catch (error) {
     console.error(error)

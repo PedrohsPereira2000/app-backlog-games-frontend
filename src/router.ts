@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from './views/Dashboard.vue'
 import Tables from './views/Tables.vue'
 import AddGame from './views/AddGame.vue'
+import BuyGame from './views/BuyGame.vue'
 import EditGame from './views/EditGame.vue'
 import UIElements from './views/UIElements.vue'
 import Login from './views/Login.vue'
@@ -41,6 +42,11 @@ const routes: RouteRecordRaw[] = [
     path: '/dashboard/:user_id/add-game',
     name: 'AddGame',
     component: AddGame,
+  },
+  {
+    path: '/dashboard/:user_id/buy-game',
+    name: 'BuyGame',
+    component: BuyGame,
   },
   {
     path: '/dashboard/:user_id/:game_id/edit-game',

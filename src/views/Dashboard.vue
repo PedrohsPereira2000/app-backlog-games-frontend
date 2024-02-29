@@ -161,32 +161,6 @@
           </div>
         </div>
 
-        <div class="w-full px-6 sm:w-1/2 xl:w-1/3">
-          <router-link :to="`/dashboard/${user_id}/add-game`">
-            <div
-              class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm"
-            >
-              <div class="p-3 bg-green-400 bg-opacity-75 rounded-full">
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke-width="1.5" 
-                  stroke="currentColor" 
-                  class="w-8 h-8 text-white">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-
-              </div>
-
-              <div class="mx-5">
-                <div class="text-gray-500">
-                  Adicionar jogo ao backlog
-                </div>
-              </div>
-            </div>
-          </router-link>
-        </div>
       </div>
     </div>
 
@@ -338,7 +312,7 @@ export default {
       const storedUser = localStorage.getItem('user')
       if (!storedUser) {
         const userId = this.$route.params.user_id
-        axios.get(`https://app-backlog-games-backend.vercel.app/user/${userId}`)
+        axios.get(`http://localhost:5000/user/${userId}`)
           .then(res => {
             this.user_id = res.data.Success.user_id
             this.user_name = res.data.Success.user_name
@@ -348,7 +322,7 @@ export default {
             this.wallet = res.data.Success.wallet
             this.finisheds = this.backlog_games.filter(game => game.finished).length;
             this.platinums = this.backlog_games.filter(game => game.platinum).length;
-            this.inBacklog = this.backlog_games.length - this.platinums;
+            this.inBacklog = this.backlog_games.length - this.finisheds;
           })
           .catch(error => {
             alert(error)
@@ -363,7 +337,7 @@ export default {
       }
     },
     async deleteGame(gameId) {
-      const res = await axios.post('https://app-backlog-games-backend.vercel.app/backlog/delete', { id: gameId, user_id: this.user_id })
+      const res = await axios.post('http://localhost:5000/dashboard/delete', { id: gameId, user_id: this.user_id })
       if (res.status === 200) {
         this.fetchUserData()
       }
