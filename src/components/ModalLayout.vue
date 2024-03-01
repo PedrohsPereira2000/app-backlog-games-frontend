@@ -38,13 +38,16 @@
             <p v-if="game.type === 'finished'" class="text-2xl font-bold">
               O {{ game.game.name }} foi finalizado em quanto tempo?
             </p>
-            <p v-else class="text-2xl font-bold">
+            <p v-else-if="game.type === 'delete'" class="text-2xl font-bold">
+              Deseja realmente excluir o jogo {{ game.game.name }} do backlog?
+            </p>
+            <p v-if="game.type === 'platinum'" class="text-2xl font-bold">
               Boa quanto tempo levou a platina do {{ game.game.name }}?
             </p>
           </div>
 
           <!-- Body -->
-          <div>
+          <div v-if="game.type === 'finished' || game.type === 'platinum'">
             <label class="text-gray-700" for="hours">Hours</label>
             <input
               v-model="hours"
@@ -63,11 +66,17 @@
             >
               Fechar
             </button>
-            <button
+            <button v-if="game.type === 'finished' || game.type === 'platinum'"
               class="px-6 py-3 font-medium tracking-wide text-white bg-indigo-600 rounded-md hover:bg-indigo-500 focus:outline-none"
               @click="updateGame"
             >
               Atualizar
+            </button>
+            <button v-if="game.type === 'delete'"
+              class="px-6 py-3 font-medium tracking-wide text-white bg-indigo-600 rounded-md hover:bg-indigo-500 focus:outline-none"
+              @click="deleteGame"
+            >
+              Excluir
             </button>
           </div>
         </div>
@@ -112,6 +121,16 @@ const updateGame = async () => {
 const closeModal = () => {
   emit('close')
 }
+
+const deleteGame = async () => {
+  const userId = props.game.user_id
+  const res = await axios.post(`http://localhost:5000/dashboard/${userId}/delete`, { id: props.game.game.id })
+  if (res.status === 200) {
+    location.reload()
+    closeModal()
+  }
+}
+
 </script>
 
 <style>

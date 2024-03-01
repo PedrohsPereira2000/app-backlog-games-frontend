@@ -102,7 +102,7 @@ export default {
   },
   methods: {
     register_user() {
-      axios.post(`${process.env.VUE_APP_BASE_URL}/user/register`, this.formData)
+      axios.post(`http://localhost:5000/user/register`, this.formData)
         .then(res => {
           console.log(res)
           if (res.status === 200) {

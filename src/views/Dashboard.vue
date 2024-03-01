@@ -193,8 +193,6 @@
                 >
                   Platinado
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-right" />
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-right" />
               </tr>
             </thead>
 
@@ -234,36 +232,6 @@
                       <img :src="game.platinum ? '/trophy-platinum.svg' : '/trophy-platinum-grayscale.svg'" alt="Trophy Platinum" width="25" height="25">
                     </button>
                   </span>
-                </td>
-
-
-                <td class="px-6 py-4 font-medium leading-5 border-b border-gray-200 whitespace-nowrap text-right">
-                  <router-link :to="`/dashboard/${user_id}/${game.id}/edit-game`">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg" 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke-width="1.5"
-                      stroke="currentColor" 
-                      class="w-8 h-8"
-                      color="black">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                    </svg>
-                  </router-link>
-                </td>
-                <td class="px-6 py-4 font-medium leading-5 border-b border-gray-200 whitespace-nowrap text-right">
-                  <a class="text-indigo-600 hover:text-indigo-900"
-                  @click.prevent="deleteGame(game.id)">
-                    <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke-width="1.5" 
-                      stroke="currentColor" 
-                      class="w-8 h-8 text-black">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                    </svg>
-                  </a>
                 </td>
               </tr>
             </tbody>
@@ -332,14 +300,11 @@ export default {
     },
     openModal(game, type) {
       if ((type === "finished" && !game.finished) || (type === "platinum" && !game.platinum)){
-        this.currentGame = { game, type, user_id: this.user_id};
+        this.currentGame = { game, type, user_id: this.user_id };
         this.isModalOpen = true;
-      }
-    },
-    async deleteGame(gameId) {
-      const res = await axios.post(`http://localhost:5000/dashboard/${userId}/delete`, { id: gameId, user_id: this.user_id })
-      if (res.status === 200) {
-        this.fetchUserData()
+      } else if (type === "delete") {
+        this.currentGame = { game, type, user_id: this.user_id };
+        this.isModalOpen = true;
       }
     },
   },
@@ -348,14 +313,20 @@ export default {
       if (this.backlog_games.length === 0) {
         return []; // Retorna uma lista vazia se backlog_games estiver vazio
       } else {
-        return this.backlog_games.sort((a, b) => {
-          // Ordenar por 'finished' e 'platinum'
-          if (!a.finished && !a.platinum && (b.finished || b.platinum)) return -1;
-          if (a.finished && !a.platinum && b.platinum) return -1;
-          if (a.finished === b.finished && a.platinum === b.platinum) {
-            // Se 'finished' e 'platinum' forem iguais, ordenar por plataforma
+        // Filtrar os jogos para mostrar apenas aqueles em que o campo 'platinum' é igual a false
+        const filteredGames = this.backlog_games.filter(game => game.platinum === false);
+
+        // Ordenar os jogos filtrados
+        return filteredGames.sort((a, b) => {
+          // Ordenar por 'finished'
+          if (!a.finished && (b.finished)) return -1;
+          if (a.finished && b.finished === false) return 1;
+
+          // Se 'finished' for igual, ordenar por plataforma
+          if (a.finished === b.finished) {
             if (a.platform.toLowerCase() < b.platform.toLowerCase()) return -1;
             if (a.platform.toLowerCase() > b.platform.toLowerCase()) return 1;
+
             // Se a plataforma for igual, ordenar por nome
             if (a.platform.toLowerCase() === b.platform.toLowerCase()) {
               if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;

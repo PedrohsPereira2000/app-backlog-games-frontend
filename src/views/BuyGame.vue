@@ -95,8 +95,8 @@ async function register() {
       finished: false,
       platinum: false,
       earned: 0,
-      price: game.value.price,
-    }
+    },
+    price: game.value.price,
   }
  
   try {

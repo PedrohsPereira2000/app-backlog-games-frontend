@@ -74,12 +74,12 @@
               </div>
 
               <div>
-                <label class="text-gray-700" for="price">Price</label>
+                <label class="text-gray-700" for="price">Earned</label>
                 <input
-                  v-model="game.price"
+                  v-model="game.earned"
                   class="w-full mt-2 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500"
-                  type="text"
-                  id="price"
+                  type="number"
+                  id="earned"
                 >
               </div>
             </div>
@@ -112,10 +112,9 @@ export default {
     }
   },
   async created() {
-    const userId = this.$route.params.user_id
-    const gameId = this.$route.params.game_id
-
     try {
+      const userId = this.$route.params.user_id
+      const gameId = this.$route.params.game_id
       const response = await axios.post(`http://localhost:5000/dashboard/${userId}/search`, { user_id: userId, id: gameId })
       this.game = response.data.game
     } catch (error) {
@@ -124,14 +123,15 @@ export default {
   },
   methods: {
     cancel() {
-      this.$router.push({ name: 'Dashboard', params: { user_id: this.$route.params.user_id } })
+      this.$router.push({ name: 'ListAllGames', params: { user_id: this.$route.params.user_id } })
     },
     async saveGame() {
       try {
-        const resp = await axios.post(`http://localhost:5000/dashboard/${userId}/update`, {"user_id": this.$route.params.user_id, "game": this.game})
+        const userId = this.$route.params.user_id
+        const resp = await axios.post(`http://localhost:5000/dashboard/${userId}/update`, {user_id: userId, game: this.game})
         if (resp.status === 200) {
           // this.$message.success('Game updated successfully')
-          this.$router.push({ name: 'Dashboard', params: { user_id: this.$route.params.user_id } })
+          this.$router.push({ name: 'ListAllGames', params: { user_id: this.$route.params.user_id } })
         } else {
           this.$message.error(resp.data.message)
         }
