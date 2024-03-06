@@ -3,6 +3,8 @@
     class="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-indigo-600"
   >
     <div class="flex items-center">
+      <!-- Adicione um label para exibir o título da página -->
+      <h1 class="text-xl font-bold text-gray-700 text-center w-full">{{ pageTitle }}</h1>
     </div>
 
     <div class="flex items-center justify-end"> <!-- Adicione a classe justify-end para alinhar para a direita -->
@@ -38,15 +40,15 @@
             class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
           >
             <router-link
-              class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
+              class=""
               :class="[$route.name === 'Profile' ? activeClass : inactiveClass]"
               :to="{ name: 'Profile', params: { user_id: getUserId() } }"
             >
-              <button @click="" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">
+              <button @click="" class="block w-full py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">
                 Profile
               </button>
             </router-link>
-            <button @click="logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Logout</button>
+            <button @click="logout" class="block w-full py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Logout</button>
           </div>
         </transition>
       </div>
@@ -55,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, defineProps} from 'vue'
 import { useSidebar } from '../composables/useSidebar'
 
 const dropdownOpen = ref(false)
@@ -79,4 +81,6 @@ const logout = () => {
   // Redirecionar para a página de login após o logout
   window.location.href = '/';
 }
+
+const { pageTitle } = defineProps()
 </script>

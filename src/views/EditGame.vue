@@ -44,16 +44,6 @@
               </div>
 
               <div>
-                <label class="text-gray-700" for="hours">Hours</label>
-                <input
-                  v-model="game.hours"
-                  class="w-full mt-2 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500"
-                  type="text"
-                  id="hour"
-                >
-              </div>
-
-              <div>
                 <label class="text-gray-700" for="finished">Finished</label>
                 <input
                   v-model="game.finished"

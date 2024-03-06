@@ -25,17 +25,12 @@
                 <th
                   class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
                 >
-                  Hours
+                  Data que foi zerado
                 </th>
                 <th
                   class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
                 >
-                  Zerado
-                </th>
-                <th
-                  class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
-                >
-                  Platinado
+                  Data que foi platinado
                 </th>
                 <th
                   class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
@@ -63,20 +58,14 @@
 
                 <td class="px-6 py-4 border-b border-gray-200 whitespace-nowrap text-center">
                   <div class="text-sm leading-5 text-gray-900">
-                    {{ game.hours }}
+                    {{ game.data_finished }}
                   </div>
                 </td>
 
                 <td class="px-6 py-4 border-b border-gray-200 whitespace-nowrap text-center">
-                  <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 rounded-full">
-                    <img :src="game.finished ? '/trophy-gold.svg' : '/trophy-gold-grayscale.svg'" alt="Trophy Gold" width="25" height="25">
-                  </span>
-                </td>
-
-                <td class="px-6 py-4 border-b border-gray-200 whitespace-nowrap text-center">
-                  <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 rounded-full">
-                    <img :src="game.platinum ? '/trophy-platinum.svg' : '/trophy-platinum-grayscale.svg'" alt="Trophy Platinum" width="25" height="25">
-                  </span>
+                  <div class="text-sm leading-5 text-gray-900">
+                    {{ game.data_platinum }}
+                  </div>
                 </td>
 
                 <td class="px-6 py-4 border-b border-gray-200 whitespace-nowrap text-center">

@@ -95,9 +95,11 @@ export default {
   },
   methods: {
     Login() {
+      console.log(this.formData)
       axios.post('http://localhost:5000/login', this.formData)
         .then(res => {
           if (res.status === 200) {
+            console.log(res)
             this.$router.push({ name: 'Dashboard', params: { user_id: res.data?.user_id } })
           } else {
             this.$message.error(res.data.message)

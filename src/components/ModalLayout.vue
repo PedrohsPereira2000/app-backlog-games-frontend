@@ -45,19 +45,6 @@
               Boa quanto tempo levou a platina do {{ game.game.name }}?
             </p>
           </div>
-
-          <!-- Body -->
-          <div v-if="game.type === 'finished' || game.type === 'platinum'">
-            <label class="text-gray-700" for="hours">Hours</label>
-            <input
-              v-model="hours"
-              @input="updateHours"
-              class="w-13 m-5 mt-2 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500"
-              type="number"
-              id="hour"
-            >
-          </div>
-
           <!-- Footer -->
           <div class="flex justify-end pt-2">
             <button
@@ -99,15 +86,8 @@ const props = defineProps({
   game: Object,
 })
 
-let hours = ref(props.game.game.hours)
-
-const updateHours = (event) => {
-  hours.value = event.target.value
-}
-
 const updateGame = async () => {
   try {
-    props.game.game.hours = parseInt(hours.value)
     const response = await axios.post('http://localhost:5000/dashboard/update/progress', {"type": props.game.type, "game": props.game.game, "user_id": props.game.user_id})
     console.log(response.data)
     emit('game-updated')
