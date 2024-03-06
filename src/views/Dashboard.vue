@@ -173,15 +173,11 @@
           <table class="min-w-full">
             <thead>
               <tr>
+                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Order</th>
                 <th
                   class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
                 >
                   Name
-                </th>
-                <th
-                  class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
-                >
-                  Hours
                 </th>
                 <th
                   class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
@@ -197,7 +193,22 @@
             </thead>
 
             <tbody class="bg-white">
-              <tr v-for="(game, index) in sortedGames" :key="index">
+              <tr
+                v-for="(game, index) in backlog_games"
+                :key="game.id"
+                draggable="true"
+                @dragstart="dragStart(index)"
+                @dragover.prevent="dragOver(index)"
+                @drop="drop(index)"
+              >
+                <!-- Alça de arrastar -->
+                <td class="px-6 py-4 border-b border-gray-200 whitespace-nowrap">
+                  <div class="flex items-center drag-handle">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
+                    </svg>
+                  </div>
+                </td>
                 <td class="px-30 py-4 border-b border-gray-200 whitespace-nowrap">
                   <div class="flex items-center">
                     <div class="ml-4">
@@ -208,13 +219,6 @@
                         {{ game.platform }}
                       </div>
                     </div>
-                  </div>
-
-                </td>
-
-                <td class="px-6 py-4 border-b border-gray-200 whitespace-nowrap text-center">
-                  <div class="text-sm leading-5 text-gray-900">
-                    {{ game.hours }}
                   </div>
                 </td>
 
@@ -248,7 +252,7 @@ import { onMounted, watch, defineProps } from 'vue'
 import axios from 'axios'
 import ModalLayout from '../components/ModalLayout.vue'
 
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+// axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 export default {
   components: {
@@ -266,6 +270,7 @@ export default {
       finisheds: 0,
       platinums: 0,
       inBacklog: 0,
+      draggedOverIndex: null,
     };
   },
   created() {
@@ -285,17 +290,16 @@ export default {
             this.user_id = res.data.Success.user_id
             this.user_name = res.data.Success.user_name
             this.user_email = res.data.Success.user_email
-            this.backlog_games = res.data.Success.backlog_games
+            this.backlog_games = res.data.Success.backlog_games.filter(game => game.platinum === false)
             this.list_buy_games = res.data.Success.list_buy_games
             this.wallet = res.data.Success.wallet
-            this.finisheds = this.backlog_games.filter(game => game.finished).length;
-            this.platinums = this.backlog_games.filter(game => game.platinum).length;
-            this.inBacklog = this.backlog_games.length - this.finisheds;
+            this.finisheds = res.data.Success.backlog_games.filter(game => game.finished).length;
+            this.platinums = res.data.Success.backlog_games.filter(game => game.platinum).length;
+            this.inBacklog = this.backlog_games.length;
           })
           .catch(error => {
             alert(error)
           })
-
       }
     },
     openModal(game, type) {
@@ -307,36 +311,16 @@ export default {
         this.isModalOpen = true;
       }
     },
-  },
-  computed: {
-    sortedGames() {
-      if (this.backlog_games.length === 0) {
-        return []; // Retorna uma lista vazia se backlog_games estiver vazio
-      } else {
-        // Filtrar os jogos para mostrar apenas aqueles em que o campo 'platinum' é igual a false
-        const filteredGames = this.backlog_games.filter(game => game.platinum === false);
-
-        // Ordenar os jogos filtrados
-        return filteredGames.sort((a, b) => {
-          // Ordenar por 'finished'
-          if (!a.finished && (b.finished)) return -1;
-          if (a.finished && b.finished === false) return 1;
-
-          // Se 'finished' for igual, ordenar por plataforma
-          if (a.finished === b.finished) {
-            if (a.platform.toLowerCase() < b.platform.toLowerCase()) return -1;
-            if (a.platform.toLowerCase() > b.platform.toLowerCase()) return 1;
-
-            // Se a plataforma for igual, ordenar por nome
-            if (a.platform.toLowerCase() === b.platform.toLowerCase()) {
-              if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-              if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-            }
-            return 0;
-          }
-          return 1;
-        });
-      }
+    dragOver(index) {
+      this.draggedOverIndex = index;
+    },
+    dragStart(index) {
+      this.draggedIndex = index;
+    },
+    drop(index) {
+      const draggedGame = this.backlog_games[this.draggedIndex];
+      this.backlog_games.splice(this.draggedIndex, 1);
+      this.backlog_games.splice(index, 0, draggedGame);
     },
   },
 };
